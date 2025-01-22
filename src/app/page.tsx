@@ -1,9 +1,11 @@
-import { Button } from '@/components/ui/button';
+'use client';
+
+import { ModeToggler } from '@/components/custom/theme/ModeToggler';
 
 export default function Home() {
 	return (
 		<div>
-			<Button>Click me</Button>
+			<ModeToggler />
 		</div>
 	);
 }
