@@ -1,9 +1,7 @@
 import { AppLayoutWrapper } from '@/components/custom/AppShell/AppLayoutWrapper';
+import { ModeToggler } from '@/components/custom/theme/ModeToggler';
 import { ThemeProvider } from '@/components/custom/theme/theme-provider';
-import {
-	SidebarProvider,
-	SidebarTrigger,
-} from '@/components/shadcn-ui/sidebar';
+import { SidebarProvider } from '@/components/shadcn-ui/sidebar';
 import type { Metadata } from 'next';
 import './globals.css';
 
@@ -25,13 +23,16 @@ export default function RootLayout({
 				enableSystem
 				disableTransitionOnChange
 			>
+				{' '}
 				<body>
 					{' '}
 					<SidebarProvider>
 						<AppLayoutWrapper />
-						<main>
-							<SidebarTrigger />
+						<main className='w-full h-screen flex items-end justify-center'>
+							{' '}
+							<ModeToggler />
 							{children}
+							{/* <SidebarTrigger /> */}
 						</main>
 					</SidebarProvider>
 				</body>
