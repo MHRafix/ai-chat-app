@@ -17,7 +17,7 @@ export default function Home() {
 				<p className='text-xl text-center font-extrabold'>Info Hacker</p>
 			</div>
 			<div
-				className={`overflow-y-auto px-4 lg:w-10/12 mx-auto h-[74.7vh] flex justify-center ${
+				className={`overflow-y-auto px-4 lg:w-10/12 mx-auto h-[75.5vh] flex justify-center ${
 					allMessages?.length > 0 ? 'items-start' : 'items-center'
 				}`}
 			>
