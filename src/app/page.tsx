@@ -4,13 +4,12 @@ import { IChatResponse } from '@/api/types-model/ai-chat-response.type';
 import MiniLogo from '@/assets/chatgptlogo.png';
 import SystemAvatar from '@/assets/chatgptlogo2.png';
 import UserAvatar from '@/assets/nouserlogo.png';
-import { ModeToggler } from '@/components/custom/theme/ModeToggler';
 import { Button } from '@/components/shadcn-ui/button';
 import { Textarea } from '@/components/shadcn-ui/textarea';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { ArrowUp, Loader2 } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -40,7 +39,7 @@ export default function Home() {
 			onSuccess: (res) => {
 				setAllMessages([
 					...allMessages,
-					{ role: res?.role, message: res.content },
+					{ role: res?.role, content: res.content },
 				]);
 				// setMessage('');
 				reset({ message: '' });
@@ -49,11 +48,21 @@ export default function Home() {
 
 	// handle send message
 	const sendMessage = async (payload: IChatPayload) => {
+		setAllMessages([
+			...allMessages,
+			{
+				role: 'user',
+				content: payload?.message,
+			},
+		]);
+
+		// axios request to API
 		const { data } = await axios.post<IChatResponse>(
 			process.env.NEXT_PUBLIC_OPEN_AI_API_URL!,
 			{
 				model: 'gpt-3.5-turbo',
 				messages: [
+					...allMessages,
 					{
 						role: 'user',
 						content: payload?.message,
@@ -72,35 +81,26 @@ export default function Home() {
 
 	// handle message form submit
 	const handleMessageSubmit = (payload: IChatPayload) => {
-		setAllMessages([
-			...allMessages,
-			{
-				role: 'user',
-				message: payload?.message,
-			},
-		]);
 		__sendMessageMutation(payload);
 	};
 
 	return (
 		<div className='w-full'>
-			<div className='lg:w-12/12 mx-auto h-[8vh] bg-[#F4F4F4] flex justify-end items-center px-5'>
-				<ModeToggler />
-			</div>
+			<div className='lg:w-12/12 mx-auto h-[8vh] bg-[#F4F4F4] flex justify-end items-center px-5'></div>
 			<div
-				className={`lg:w-10/12 mx-auto h-[77vh] flex justify-center ${
+				className={`overflow-y-auto px-4 lg:w-10/12 mx-auto h-[77vh] flex justify-center ${
 					allMessages?.length > 0 ? 'items-start' : 'items-center'
 				}`}
 			>
 				{allMessages?.length > 0 ? (
-					<div className='messages'>
+					<div className='!w-full'>
 						{allMessages.map((message, index) => (
 							<div
 								key={index}
 								className={
 									message?.role === 'user'
-										? `bg-[#13AD80] p-3 rounded-md my-5`
-										: `bg-[#ffffff] my-5 p-3 rounded-md`
+										? `!w-full bg-[#71f5cd4b] p-3 rounded-md my-5`
+										: `!w-full bg-[#ffffff] my-5 p-3 rounded-md`
 								}
 							>
 								<div className='flex items-center'>
@@ -114,14 +114,8 @@ export default function Home() {
 										/>
 									</div>
 									<div className='ml-3'>
-										<p
-											className={`text-lg font-medium ${
-												message?.role === 'user'
-													? 'text-white'
-													: 'text-slate-700'
-											}`}
-										>
-											{message?.message}
+										<p className='text-lg font-medium text-slate-700'>
+											{message?.content}
 										</p>
 									</div>
 								</div>
@@ -164,21 +158,16 @@ export default function Home() {
 								handleSubmit(handleMessageSubmit)(); // trigger form submission
 							}
 						}}
+						className='!text-lg'
 					/>
 					<Button
 						type='submit'
 						disabled={!watch('message') || __messageSending}
 						variant={'outline'}
 						size={'lg'}
-						className='py-[30px]'
+						className='py-[30px] absolute right-2'
 					>
-						{__messageSending ? (
-							<>
-								<Loader2 className='mr-2 h-8 w-8 animate-spin' />
-							</>
-						) : (
-							<ArrowUp size={30} />
-						)}
+						<ArrowUp size={30} />
 					</Button>
 				</form>
 			</div>
@@ -188,9 +177,35 @@ export default function Home() {
 
 interface IChatMessage {
 	role: string;
-	message: string;
+	content: string;
 }
 
 interface IChatPayload {
 	message: string;
 }
+
+// {
+// 	"model": "gpt-3.5-turbo",
+// 	"messages": [
+// 			{
+// 					"role": "user",
+// 					"content": "Who is Osama Bin Laden ?"
+// 			}, {
+// 							"role": "assistant",
+// 							"content": "Osama Bin Laden was a Saudi Arabian militant and the founder of the terrorist organization al-Qaeda. He is known for being the mastermind behind the September 11, 2001 attacks on the United States.\n\nBin Laden fought in various conflicts, including the Soviet-Afghan War in the 1980s, where he joined the mujahideen fighters who were resisting the Soviet occupation of Afghanistan. He also fought against the United States and its allies in various regions, including in Afghanistan and Pakistan. Bin Laden's actions and beliefs were aimed at promoting his extremist version of Islam and carrying out attacks against Western interests.",
+// 							"refusal": null
+// 					},
+// 			{
+// 					"role": "user",
+// 					"content": "How many wives he was ?"
+// 			},
+// 			{
+// 							"role": "assistant",
+// 							"content": "Osama Bin Laden was known to have multiple wives. It is reported that he had at least five wives over the course of his life. He had children with several of his wives, and some of them were also involved in his extremist activities. Bin Laden's family members, including his wives and children, were known to have lived with him in various locations, including in Afghanistan and Pakistan.",
+// 							"refusal": null
+// 					},
+// 					{ "role": "user",
+// 							"content": "where lived in PK?"
+// 					}
+// 	]
+// }
