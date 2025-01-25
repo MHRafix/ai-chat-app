@@ -13,7 +13,7 @@ export default function Home() {
 	return (
 		<div className='w-full'>
 			<div className='lg:w-12/12 h-[10vh] bg-[#ffffff] gap-2 flex justify-center items-center px-5'>
-				<Image src={MiniLogo} alt='logo' width={80} height={80} />
+				<Image src={MiniLogo} alt='logo' width={65} height={65} />
 				<p className='text-xl text-center font-extrabold'>Info Hacker</p>
 			</div>
 			<div

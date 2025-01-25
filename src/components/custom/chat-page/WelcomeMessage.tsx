@@ -4,7 +4,7 @@ import React from 'react';
 
 const WelcomeMessage: React.FC = () => {
 	return (
-		<div className='text-center w-[400px]'>
+		<div className='text-center w-[450px]'>
 			<Image
 				className='mx-auto mb-3'
 				src={MiniLogo}

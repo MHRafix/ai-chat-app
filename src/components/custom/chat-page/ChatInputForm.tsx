@@ -82,7 +82,7 @@ const ChatInputForm: React.FC<IChatInputFormProps> = ({
 	};
 
 	return (
-		<div className='lg:w-12/12 flex justify-center items-center  bg-[#ffffff] border-t-[1px] border-t-solid border-t-[#cac5c5] px-5 py-8'>
+		<div className='lg:w-12/12 flex justify-center items-center bg-[#ffffff] border-t-[1px] border-t-solid border-t-[#cac5c5] px-5 py-5'>
 			<form
 				onSubmit={handleSubmit(handleMessageSubmit)}
 				className='w-full lg:w-10/12 flex justify-center gap-2 items-center relative'
