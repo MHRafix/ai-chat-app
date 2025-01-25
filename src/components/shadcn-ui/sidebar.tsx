@@ -1,14 +1,11 @@
 'use client';
 
-import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { VariantProps, cva } from 'class-variance-authority';
 import { PanelLeft } from 'lucide-react';
+import * as React from 'react';
 
-import { useIsMobile } from '@/hooks/use-mobile';
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/shadcn-ui/button';
-import { Input } from '@/components/shadcn-ui/input';
 import { Separator } from '@/components/shadcn-ui/separator';
 import { Sheet, SheetContent } from '@/components/shadcn-ui/sheet';
 import { Skeleton } from '@/components/shadcn-ui/skeleton';
@@ -18,6 +15,8 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from '@/components/shadcn-ui/tooltip';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -331,24 +330,6 @@ const SidebarInset = React.forwardRef<
 	);
 });
 SidebarInset.displayName = 'SidebarInset';
-
-const SidebarInput = React.forwardRef<
-	React.ElementRef<typeof Input>,
-	React.ComponentProps<typeof Input>
->(({ className, ...props }, ref) => {
-	return (
-		<Input
-			ref={ref}
-			data-sidebar='input'
-			className={cn(
-				'h-8 w-full bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring',
-				className
-			)}
-			{...props}
-		/>
-	);
-});
-SidebarInput.displayName = 'SidebarInput';
 
 const SidebarHeader = React.forwardRef<
 	HTMLDivElement,
@@ -744,7 +725,6 @@ export {
 	SidebarGroupContent,
 	SidebarGroupLabel,
 	SidebarHeader,
-	SidebarInput,
 	SidebarInset,
 	SidebarMenu,
 	SidebarMenuAction,
