@@ -123,23 +123,36 @@ export default function Home() {
 					className={`overflow-y-auto flex justify-between items-start lg:w-3/12 bg-white m-5 p-5 rounded-md h-[96%]`}
 				>
 					<div className='w-full'>
-						<h2 className='font-bold'>Recent chats</h2>
-						{recentChats?.map((chats, idx: number) => (
-							<div
-								key={idx}
-								className='py-3 px-2 font-bold rounded-md my-2 text-sm bg-slate-200 w-full'
-							>
-								{chats?.chatMessages[0]?.content?.slice(0, 100)}
-							</div>
-						))}
-
-						{isPending && (
+						<h1 className='font-bold text-lg'>Recent chats</h1>
+						{recentChats?.length > 0 ? (
 							<>
-								{new Array(10).fill(10).map((_, idx) => (
-									<Skeleton key={idx} className='my-2 h-12 w-full' />
+								{recentChats?.map((chats, idx: number) => (
+									<div
+										key={idx}
+										className='py-3 px-2 font-bold rounded-md my-2 text-sm bg-slate-200 w-full'
+									>
+										{chats?.chatMessages[0]?.content?.slice(0, 100)}
+									</div>
 								))}
 							</>
+						) : (
+							<h1>No recent chats available.</h1>
 						)}
+						<>
+							{isPending ? (
+								<>
+									{new Array(10).fill(10).map((_, idx) => (
+										<Skeleton key={idx} className='my-2 h-12 w-full' />
+									))}
+								</>
+							) : (
+								<>
+									{!user?.email && (
+										<h3>Recent chats only available for logged in user.</h3>
+									)}
+								</>
+							)}
+						</>
 					</div>
 				</div>
 			</div>

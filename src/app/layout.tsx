@@ -1,5 +1,6 @@
 'use client';
 
+import { Toaster } from '@/components/shadcn-ui/toaster';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import './globals.css';
@@ -15,6 +16,7 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<QueryClientProvider client={queryClient}>
+				<Toaster />
 				<body>
 					{' '}
 					{/* <SidebarProvider>

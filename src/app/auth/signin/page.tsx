@@ -3,7 +3,6 @@ import authenticationApiRepository from '@/api/repository/auth.repo';
 import { ISigninPayload } from '@/api/types-model/auth.types';
 import { Button } from '@/components/shadcn-ui/button';
 import { Input } from '@/components/shadcn-ui/input';
-import { ToastAction } from '@/components/shadcn-ui/toast';
 import { useToast } from '@/hooks/use-toast';
 import ProtectWithoutSession from '@/lib/protectors/ProtectWithoutSession';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -66,7 +65,6 @@ const SigninPage: NextPage = () => {
 			toast({
 				variant: 'destructive',
 				title: 'Failed to login',
-				action: <ToastAction altText='Try again'>Try again</ToastAction>,
 			});
 		},
 	});
@@ -102,6 +100,7 @@ const SigninPage: NextPage = () => {
 						}}
 						className='mb-5 py-5 border-solid border-[1px] border-black'
 						required
+						type='password'
 					/>
 
 					<Button
