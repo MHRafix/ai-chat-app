@@ -124,20 +124,17 @@ export default function Home() {
 				>
 					<div className='w-full'>
 						<h1 className='font-bold text-lg'>Recent chats</h1>
-						{recentChats?.length > 0 ? (
-							<>
-								{recentChats?.map((chats, idx: number) => (
-									<div
-										key={idx}
-										className='py-3 px-2 font-bold rounded-md my-2 text-sm bg-slate-200 w-full'
-									>
-										{chats?.chatMessages[0]?.content?.slice(0, 100)}
-									</div>
-								))}
-							</>
-						) : (
-							<h1>No recent chats available.</h1>
-						)}
+						<>
+							{recentChats?.map((chats, idx: number) => (
+								<div
+									key={idx}
+									className='py-3 px-2 font-bold rounded-md my-2 text-sm bg-slate-200 w-full'
+								>
+									{chats?.chatMessages[0]?.content?.slice(0, 100)}
+								</div>
+							))}
+						</>
+
 						<>
 							{isPending ? (
 								<>
@@ -147,9 +144,14 @@ export default function Home() {
 								</>
 							) : (
 								<>
-									{!user?.email && (
-										<h3>Recent chats only available for logged in user.</h3>
-									)}
+									<>
+										{!user?.email && (
+											<h3>Recent chats only available for logged in user.</h3>
+										)}
+										{recentChats.length < 1 && (
+											<h1>No recent chats available.</h1>
+										)}
+									</>
 								</>
 							)}
 						</>

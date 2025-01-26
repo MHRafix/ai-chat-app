@@ -101,6 +101,7 @@ const SigninPage: NextPage = () => {
 						className='mb-5 py-5 border-solid border-[1px] border-black'
 						required
 						type='password'
+						minLength={8}
 					/>
 
 					<Button
