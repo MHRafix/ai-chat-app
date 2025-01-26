@@ -1,24 +1,31 @@
+import chatApiRepository from '@/api/repository/chat.repo';
 import { IChatResponse } from '@/api/types-model/ai-chat-response.type';
 import { IChatMessage } from '@/app/page';
 import { Button } from '@/components/shadcn-ui/button';
 import { Textarea } from '@/components/shadcn-ui/textarea';
+import { useGetSession } from '@/hooks/use-get-session';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { ArrowUp } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 
 interface IChatInputFormProps {
 	allMessages: IChatMessage[];
 	onChangeMessage: (message: IChatMessage[]) => void;
+	onRefetch: () => void;
 }
 
 const ChatInputForm: React.FC<IChatInputFormProps> = ({
 	allMessages,
 	onChangeMessage,
+	onRefetch,
 }) => {
+	const { user } = useGetSession();
+	const [chatId, setChatId] = useState<string>();
+
 	// form initial
 	const { register, handleSubmit, watch, reset } = useForm<{ message: string }>(
 		{
@@ -30,15 +37,61 @@ const ChatInputForm: React.FC<IChatInputFormProps> = ({
 		}
 	);
 
+	// save chat to db
+	const { mutate: __saveChatMutation, isPending: __chatSaving } = useMutation({
+		mutationFn: (payload: { user: string; chatMessages: IChatMessage[] }) =>
+			chatApiRepository.createChat(payload),
+		onSuccess: (res) => {
+			setChatId(res?.data?._id);
+			onRefetch();
+		},
+	});
+
+	// update chat to db
+	const { mutate: __updateChatMutation, isPending: __chatUpdating } =
+		useMutation({
+			mutationFn: ({
+				chatId,
+				chatMessages,
+			}: {
+				chatId: string;
+				chatMessages: IChatMessage[];
+			}) =>
+				chatApiRepository.updateChat(chatId, { chatMessages, user: user?._id }),
+			onSuccess: () => {
+				onRefetch();
+			},
+		});
+
 	// chat mutation here
 	const { mutate: __sendMessageMutation, isPending: __messageSending } =
 		useMutation({
-			mutationFn: (payload: { message: string }) => sendMessage(payload),
+			mutationFn: (payload: IChatPayload) => sendMessage(payload),
 			onSuccess: (res) => {
 				onChangeMessage([
 					...allMessages,
 					{ role: res?.role, content: res.content },
 				]);
+
+				if (user?.email) {
+					if (allMessages.length === 1) {
+						__saveChatMutation({
+							user: user?._id!,
+							chatMessages: [
+								...allMessages,
+								{ role: res?.role, content: res.content },
+							],
+						});
+					} else if (allMessages.length > 1) {
+						__updateChatMutation({
+							chatId: chatId!,
+							chatMessages: [
+								...allMessages,
+								{ role: res?.role, content: res.content },
+							],
+						});
+					}
+				}
 			},
 		});
 
@@ -82,7 +135,7 @@ const ChatInputForm: React.FC<IChatInputFormProps> = ({
 	};
 
 	return (
-		<div className='lg:w-12/12 flex justify-center items-center bg-[#ffffff] border-t-[1px] border-t-solid border-t-[#cac5c5] px-5 py-5'>
+		<div className='fixed bottom-0 w-full !z-[999999999] lg:w-12/12 flex justify-center items-center bg-[#ffffff] border-t-[1px] border-t-solid border-t-[#cac5c5] px-5 py-5'>
 			<form
 				onSubmit={handleSubmit(handleMessageSubmit)}
 				className='w-full lg:w-10/12 flex justify-center gap-2 items-center relative'
