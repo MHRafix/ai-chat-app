@@ -39,7 +39,7 @@ export default function Home() {
 	const { user } = useGetSession();
 
 	// fetch logged in user chats
-	const { data, isPending, refetch } = useQuery({
+	const { data, isLoading, refetch } = useQuery({
 		queryKey: ['all-chats-of-user'],
 		queryFn: () =>
 			chatApiRepository
@@ -136,7 +136,7 @@ export default function Home() {
 						</>
 
 						<>
-							{isPending ? (
+							{isLoading ? (
 								<>
 									{new Array(10).fill(10).map((_, idx) => (
 										<Skeleton key={idx} className='my-2 h-12 w-full' />
