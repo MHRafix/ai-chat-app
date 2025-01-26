@@ -148,9 +148,9 @@ export default function Home() {
 										{!user?.email && (
 											<h3>Recent chats only available for logged in user.</h3>
 										)}
-										{recentChats.length < 1 && (
+										{!recentChats.length ? (
 											<h1>No recent chats available.</h1>
-										)}
+										): null}
 									</>
 								</>
 							)}
