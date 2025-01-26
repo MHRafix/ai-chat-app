@@ -82,6 +82,7 @@ export default function Home() {
 										onClick={() => {
 											router.push('/auth/signin');
 											Cookies.remove('user');
+											window.location.href = '/auth/signin';
 										}}
 									>
 										Logout
