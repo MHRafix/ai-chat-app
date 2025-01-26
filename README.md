@@ -20,3 +20,11 @@
 # Live Link: [https://info-hacker.vercel.app]
 
 ### Author: ✅ Mehedi Hasan Rafiz ✅ Software Developer ✅ Portfolio [https://rafix.netlify.app]
+
+## Instructions to run the app
+
+- pnpm/npm/yarn install
+- pnpm/yarn dev || npm run dev
+- Set your OPEN AI API_KEY in .env file with this name -> NEXT_PUBLIC_OPEN_AI_SECRET
+- set to .env NEXT_PUBLIC_OPEN_AI_API_URL=https://api.openai.com/v1/chat/completions
+- set to.env NEXT_PUBLIC_API=https://info-hacker.up.railway.app
