@@ -5,7 +5,6 @@ import { Button } from '@/components/shadcn-ui/button';
 import { Input } from '@/components/shadcn-ui/input';
 import { useToast } from '@/hooks/use-toast';
 import ProtectWithoutSession from '@/lib/protectors/ProtectWithoutSession';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -15,7 +14,6 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import * as Yup from 'yup';
 
 const SigninPage: NextPage = () => {
 	const router = useRouter(); // router instance
@@ -23,14 +21,7 @@ const SigninPage: NextPage = () => {
 	const { toast } = useToast();
 
 	// signin form
-	const {
-		handleSubmit,
-		register,
-		formState: { errors },
-	} = useForm({
-		defaultValues: { email: '' },
-		resolver: yupResolver(Signin_Form_Validation_Schema),
-	});
+	const { handleSubmit, register } = useForm<ISigninPayload>({});
 
 	// execute after success
 	const onSuccess = (res: { _id: string; token: string }) => {
@@ -134,8 +125,3 @@ const SigninPage: NextPage = () => {
 };
 
 export default ProtectWithoutSession(SigninPage);
-
-export const Signin_Form_Validation_Schema = Yup.object().shape({
-	email: Yup.string().email().required().label('Email'),
-	password: Yup.string().min(4).max(20).required().label('Password'),
-});
